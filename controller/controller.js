@@ -46,34 +46,48 @@ exports.get = (req, res) => {
 };
 
 exports.findOne = (req, res) => {
-    const tab= [];
-
-    Eleve.findById(req.body._id)
+    const tab = [];
+    
+    Eleve.findById(req.params._id)
     .then(eleve => {
-        if(!eleve) {
-            return res.status(404).send({
-                message: "Note not found with id " + req.body._id
-            });            
-        }
-        console.log(eleve);
+               
+        // if(!eleve) {
+        //     return res.status(404).send({
+        //         message: "Note not found with id " + req.body._id
+        //     });            
+        // }
         
-        Prof.find({classe:eleve.classe})
-        .then(prof => {
-            tab.push(eleve)
-            tab.push(prof)
-            res.send(tab);
-        })
+        
+        //{classe: eleve.classe1} || {classe: eleve.classe2} || {classe: eleve.classe3}
+        Prof.find()
+        .then(prof => { 
+            tab.push(eleve)       
+            //console.log(prof);
+            
+         for (var i = 0;i < prof.length; i++){
+            if (prof[i].classe.classe1 == eleve.classe || prof[i].classe.classe2== eleve.classe || prof[i].classe.classe3== eleve.classe ){
+                tab.push(prof[i])
+                console.log(prof[i]);
+                
+            }
+               
+         };       
+         res.send(tab);
+        console.log(eleve);
 
     }).catch(err => {
         if(err.kind === 'ObjectId') {
             return res.status(404).send({
-                message: "Note not found with id " + req.body._id
+                message: "Note not found with id " + req.params._id
             });                
         }
         return res.status(500).send({
-            message: "Error retrieving eleve with id " + req.body._id
+            message: "Error retrieving eleve with id " + req.params._id
         });
     });
+        
+
+    });    
 };
 
 //prof
@@ -92,8 +106,8 @@ exports.postProf = (req, res) => {
     const prof = new Prof({
         nom: req.body.nom || "Untitled Note", 
         prenom: req.body.prenom,
-        matiere: req.body.matiere,
-        classe: req.body.classe,
+        matiere: {matiere1: req.body.matiere1,matiere2: req.body.matiere2,matiere3: req.body.matiere3},
+        classe: {classe1: req.body.classe1, classe2: req.body.classe2, classe3: req.body.classe3},
         _id: increm
     });
 

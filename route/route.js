@@ -5,11 +5,11 @@ module.exports = (app) => {
 
     app.get('/eleve', notes.get);
 
-    app.post('/eleve/id', notes.findOne);
+    app.get('/eleve/:_id', notes.findOne);
 
     app.post('/prof', notes.postProf);
 
     app.get('/prof', notes.getProf);
 
-    app.post('/prof/id', notes.findOneProf);
+    app.get('/prof/:_id', notes.findOneProf);
 }

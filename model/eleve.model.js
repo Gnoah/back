@@ -5,7 +5,7 @@ const NoteSchema = mongoose.Schema({
     prenom: String,
     age: Number,
     classe: Number,
-    _id:Number
+    _id: Number
 },{
     timestamps: true
 });
